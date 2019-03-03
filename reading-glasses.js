@@ -16,9 +16,9 @@ function dismissDialog(event) {
 function resizeDialog() {
   var dialog = document.getElementById("reading-dialog")
   dialog.style.height = `${document.documentElement.clientHeight * 0.85}px`;
-  dialog.style.marginTop = `${document.documentElement.clientHeight * 0.05}px`;
-  dialog.style.width = `${document.documentElement.clientWidth * 0.85}px`;
-  dialog.style.marginLeft = `${document.documentElement.clientWidth * 0.05}px`;
+  dialog.style.marginTop = `${document.documentElement.clientHeight * 0.075}px`;
+  dialog.style.width = `${document.documentElement.clientWidth * 0.6}px`;
+  dialog.style.marginLeft = `${document.documentElement.clientWidth * 0.2}px`;
 }
 
 function cleanHTML(element) {
@@ -76,10 +76,7 @@ function getChildDivs(element) {
   if (dialog.open) {
     dialog.close();
   } else {
-    dialog.style.height = `${document.documentElement.clientHeight * 0.85}px`;
-    dialog.style.marginTop = `${document.documentElement.clientHeight * 0.05}px`;
-    dialog.style.width = `${document.documentElement.clientWidth * 0.85}px`;
-    dialog.style.marginLeft = `${document.documentElement.clientWidth * 0.05}px`;
+    resizeDialog();
     var iframeDoc = document.getElementById("parsed-page").contentDocument;
     var iframeHead = iframeDoc.head;
     if (iframeHead.children) {
