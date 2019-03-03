@@ -1,0 +1,20 @@
+{
+  "name": "Reading Glasses",
+  "description": "Shows web pages as if looking through reading glasses",
+  "version": "1.0",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_title": "Reading Glasses"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "css": ["./dialog.css"]
+    }
+  ],
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+  "permissions": ["activeTab"]
+}
