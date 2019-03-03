@@ -1,0 +1,19 @@
+/* Styling for the dialog that contains the reduced web page content */
+#reading-dialog {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  color: black;
+  padding: 1%;
+  border-width: initial;
+  border-style: solid;
+  border-color: initial;
+  border-image: initial;
+  background: white;
+}
+
+#parsed-page {
+  height: 100%;
+  width: 100%;
+  border-width: 0px;
+}
