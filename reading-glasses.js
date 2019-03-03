@@ -69,6 +69,7 @@ function getChildDivs(element) {
   var dialog = document.getElementById(DIALOG_ID);
   if (!dialog) {
     injectDialogHTML();
+    document.head.innerHTML += `<link rel="stylesheet" href=${chrome.runtime.getURL("dialog.css")}>`;
     dialog = document.getElementById(DIALOG_ID);
     document.onclick = dismissDialog;
     window.onresize = resizeDialog;

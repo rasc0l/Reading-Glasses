@@ -11,12 +11,6 @@
       "128": "images/reading128.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["*://*/*"],
-      "css": ["./dialog.css"]
-    }
-  ],
   "background": {
     "persistent": false,
     "scripts": ["background.js"]
@@ -26,5 +20,8 @@
     "16": "images/reading16.png",
     "48": "images/reading48.png",
     "128": "images/reading128.png"
-  }
+  },
+  "web_accessible_resources": [
+    "dialog.css"
+  ]
 }
