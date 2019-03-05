@@ -1,7 +1,7 @@
 {
   "name": "Reading Glasses",
   "description": "Shows a more focused view of a webpage.",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 2,
   "browser_action": {
     "default_title": "Reading Glasses",
