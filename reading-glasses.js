@@ -9,6 +9,7 @@ function dismissDialog(event) {
   var dialog = document.getElementById("reading-dialog")
   if (event.target == dialog) {
     dialog.close();
+    window.location.reload();
   }
 }
 
