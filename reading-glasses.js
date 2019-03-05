@@ -68,24 +68,12 @@ function skimPage(roots) {
 
 // Gets the 1st level divs from the element, mostly for pulling first level divs from the <body>
 function getChildDivs(element) {
-  var result = [];
-  for (var i = 0; i < element.children.length; i++) {
-    if (element.children[i].tagName == "DIV") {
-      result.push(element.children[i]);
-    }
-  }
-  return result;
+  return Array.prototype.filter.call(element.children, child => child.tagName == "DIV");
 }
 
 function getStyleSheets() {
   var links = document.getElementsByTagName("link");
-  var result = [];
-  for (var i = 0; i < links.length; i++) {
-    if (links[i].rel == "stylesheet") {
-      result.push(links[i]);
-    }
-  }
-  return result;
+  return Array.prototype.filter.call(links, link => link.rel == "stylesheet");
 }
 
 
@@ -118,12 +106,8 @@ function getStyleSheets() {
     var styleSheets = getStyleSheets();
     var firstLevelDivs = getChildDivs(document.getElementsByTagName("body")[0]);
     var parsed = skimPage(firstLevelDivs);
-    for (var i = 0; i < styleSheets.length; i++) {
-      iframeHead.appendChild(styleSheets[i].cloneNode(true));
-    }
-    for (var i = 0; i < parsed.length; i++) {
-      iframeBody.appendChild(parsed[i]);
-    }
+    styleSheets.map(sheet => iframeHead.appendChild(sheet.cloneNode(true)))
+    parsed.map(docEle => iframeBody.appendChild(docEle.cloneNode(true)))
     dialog.showModal();
   }
 })();
