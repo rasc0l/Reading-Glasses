@@ -31,6 +31,11 @@ function dismissDialog(event) {
   }
 }
 
+function removeElement(event) {
+  event.target.parentNode.removeChild(event.target);
+}
+
+
 // Callback for window.resize listener
 function resizeDialog() {
   var dialog = document.getElementById("reading-dialog")
@@ -107,7 +112,11 @@ function getStyleSheets() {
     var firstLevelDivs = getChildDivs(document.getElementsByTagName("body")[0]);
     var parsed = skimPage(firstLevelDivs);
     styleSheets.map(sheet => iframeHead.appendChild(sheet.cloneNode(true)))
-    parsed.map(docEle => iframeBody.appendChild(docEle.cloneNode(true)))
+    parsed.map(function(docEle) {
+      docEle = docEle.cloneNode(true);
+      docEle.addEventListener("click", removeElement);
+      iframeBody.appendChild(docEle);
+    });
     dialog.showModal();
   }
 })();
