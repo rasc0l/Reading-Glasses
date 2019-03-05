@@ -1,15 +1,33 @@
-function injectDialogHTML() {
-  document.body.innerHTML +=`<dialog id="reading-dialog">
-           <iframe id="parsed-page"></iframe>
-           </dialog>`;
+/*
+ * Functions for adding necessary HTML to the DOM
+ */
+function injectHTML() {
+  injectHeadHTML();
+  injectBodyHTML();
 }
+
+function injectHeadHTML() {
+  var cssLink = document.createElement("link");
+  cssLink.rel = "stylesheet"
+  cssLink.href = `${chrome.runtime.getURL("dialog.css")}`
+  document.head.appendChild(cssLink);
+}
+
+function injectBodyHTML() {
+  var dialog = document.createElement("dialog");
+  dialog.id = "reading-dialog";
+  var iframe = document.createElement("iframe");
+  iframe.id = "parsed-page";
+  dialog.appendChild(iframe);
+  document.body.appendChild(dialog);
+}
+
 
 // Callback for document.onclick listener
 function dismissDialog(event) {
   var dialog = document.getElementById("reading-dialog")
   if (event.target == dialog) {
-    dialog.close();
-    window.location.reload();
+    dialog.close()
   }
 }
 
@@ -23,7 +41,9 @@ function resizeDialog() {
 }
 
 function cleanHTML(element) {
-  element.innerHTML = "";
+  if (element.children) {
+    element.innerHTML = "";
+  }
 }
 
 // Depth first search to retrieve the intended reading content
@@ -57,10 +77,21 @@ function getChildDivs(element) {
   return result;
 }
 
+function getStyleSheets() {
+  var links = document.getElementsByTagName("link");
+  var result = [];
+  for (var i = 0; i < links.length; i++) {
+    if (links[i].rel == "stylesheet") {
+      result.push(links[i]);
+    }
+  }
+  return result;
+}
+
 
 /* Function driving the background.js browseraction.onclick listener
  * Logic:
- * Initialize dialog if needed
+ * Initialize dialog and listeners if needed
  * Scrape stylesheets and p/h{n} tags for text data
  * Add that data to the iframe inside the dialog's DOM
  * Show modal
@@ -69,8 +100,7 @@ function getChildDivs(element) {
   var DIALOG_ID = "reading-dialog";
   var dialog = document.getElementById(DIALOG_ID);
   if (!dialog) {
-    injectDialogHTML();
-    document.head.innerHTML += `<link rel="stylesheet" href=${chrome.runtime.getURL("dialog.css")}>`;
+    injectHTML();
     dialog = document.getElementById(DIALOG_ID);
     document.onclick = dismissDialog;
     window.onresize = resizeDialog;
@@ -81,21 +111,16 @@ function getChildDivs(element) {
     resizeDialog();
     var iframeDoc = document.getElementById("parsed-page").contentDocument;
     var iframeHead = iframeDoc.head;
-    if (iframeHead.children) {
-      cleanHTML(iframeHead);
-    }
-    var styleSheets = document.getElementsByTagName("link");
-    for (var i = 0; i < styleSheets.length; i++) {
-      if (styleSheets[i].rel == "stylesheet") {
-        iframeHead.appendChild(styleSheets[i].cloneNode(true));
-      }
-    }
     var iframeBody = iframeDoc.body;
-    if (iframeBody.children) {
-      cleanHTML(iframeBody);
-    }
+    cleanHTML(iframeHead);
+    cleanHTML(iframeBody);
+
+    var styleSheets = getStyleSheets();
     var firstLevelDivs = getChildDivs(document.getElementsByTagName("body")[0]);
     var parsed = skimPage(firstLevelDivs);
+    for (var i = 0; i < styleSheets.length; i++) {
+      iframeHead.appendChild(styleSheets[i].cloneNode(true));
+    }
     for (var i = 0; i < parsed.length; i++) {
       iframeBody.appendChild(parsed[i]);
     }
